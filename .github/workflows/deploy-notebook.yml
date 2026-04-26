@@ -115,7 +115,7 @@ jobs:
       run: |
         DEST_HOST=${{ secrets.DATABRICKS_DEST_HOST }}
         DEST_TOKEN=${{ secrets.DATABRICKS_DEST_TOKEN }}
-        DEST_BASE="/py/scripts/main"
+        DEST_BASE="/proyectoMovies/scripts/main"
         CLUSTER_ID="${{ env.CLUSTER_ID }}"
         
         echo "Creando workflow: WF_ADB con cluster existente ID: $CLUSTER_ID"
@@ -131,7 +131,10 @@ jobs:
               "description": "Ejecuta la preparacion de ambiente",
               "notebook_task": {
                 "notebook_path": "/proyectoMovies/scripts/main/1.Preparacion_Ambiente",
-                "source": "WORKSPACE"
+                "source": "WORKSPACE",
+                "base_parameters": {
+                  "nameStorage": "adlsmovieproject"
+                }
               },
               "existing_cluster_id": "$CLUSTER_ID",
               "timeout_seconds": 3600,
@@ -142,7 +145,12 @@ jobs:
               "description": "Ejecuta la creacion de estructuras",
               "notebook_task": {
                 "notebook_path": "/proyectoMovies/scripts/main/2.DLs-Medallion",
-                "source": "WORKSPACE"
+                "source": "WORKSPACE",
+                "base_parameters": {
+                  "nameContainer": "unit-catalog",
+                  "nameStorage": "adlsmovieproject",
+                  "catalogo": "catalog_movie_project"
+                }
               },
               "existing_cluster_id": "$CLUSTER_ID",
               "timeout_seconds": 3600,
@@ -158,7 +166,13 @@ jobs:
               "description": "Ejecuta la ingesta de informacion",
               "notebook_task": {
                 "notebook_path": "/proyectoMovies/scripts/main/3.Ingest-Data",
-                "source": "WORKSPACE"
+                "source": "WORKSPACE",
+                "base_parameters": {
+                  "container": "raw",
+                  "catalogo": "catalog_movie_project",
+                  "esquema": "bronze",
+                  "storageName": "adlsmovieproject"
+                }                 
               },
               "existing_cluster_id": "$CLUSTER_ID",
               "timeout_seconds": 3600,
@@ -174,8 +188,11 @@ jobs:
               "description": "Ejecuta la transformacion de informacion",
               "notebook_task": {
                 "notebook_path": "/proyectoMovies/scripts/main/4.Transform",
-                "source": "WORKSPACE"
-              },
+                "source": "WORKSPACE",
+                "base_parameters": {
+                  "catalogo": "catalog_movie_project"
+                 }              
+                },
               "existing_cluster_id": "$CLUSTER_ID",
               "timeout_seconds": 3600,
               "max_retries": 2,
@@ -190,7 +207,10 @@ jobs:
               "description": "Ejecuta la disponibilizacion de informacion",
               "notebook_task": {
                 "notebook_path": "/proyectoMovies/scripts/main/5.Service_layer",
-                "source": "WORKSPACE"
+                "source": "WORKSPACE",
+                "base_parameters": {
+                  "catalogo": "catalog_movie_project"
+                 }              
               },
               "existing_cluster_id": "$CLUSTER_ID",
               "timeout_seconds": 3600,
@@ -219,7 +239,7 @@ jobs:
             "environment": "production",
             "created_by": "github_actions",
             "project": "automated_deployment",
-            "cluster_used": "ClusterSD"
+            "cluster_used": "cluster_SD"
           }
         }
         EOF
