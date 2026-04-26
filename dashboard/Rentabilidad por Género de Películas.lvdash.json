@@ -1,0 +1,519 @@
+{
+  "datasets": [
+    {
+      "name": "c7a6e8b0",
+      "displayName": "kpi_genre",
+      "queryLines": [
+        "select * from catalog_movie_project.golden.view_sl_kpi_genre"
+      ]
+    },
+    {
+      "name": "62ce3e3f",
+      "displayName": "Untitled dataset",
+      "queryLines": [
+        ""
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "194d047c",
+      "displayName": "dash_generpPeliculas",
+      "layout": [
+        {
+          "widget": {
+            "name": "title",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## 🎬 Análisis de Rentabilidad por Género de Películas\n",
+                "Explora el rendimiento financiero, ratings y retorno de inversión (ROI) por género cinematográfico."
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "counter_total_genres",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c7a6e8b0",
+                  "fields": [
+                    {
+                      "name": "count(genre)",
+                      "expression": "COUNT(`genre`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Total Géneros",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "count(genre)",
+                  "displayName": "Total Géneros"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 4,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "counter_avg_roi",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c7a6e8b0",
+                  "fields": [
+                    {
+                      "name": "avg(avg_roi)",
+                      "expression": "AVG(`avg_roi`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "ROI Promedio",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg(avg_roi)",
+                  "format": {
+                    "type": "number-plain",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    },
+                    "abbreviation": "none"
+                  },
+                  "displayName": "ROI Promedio"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 2,
+            "width": 4,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "counter_avg_revenue",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c7a6e8b0",
+                  "fields": [
+                    {
+                      "name": "avg(avg_revenue)",
+                      "expression": "AVG(`avg_revenue`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Ingreso Promedio",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg(avg_revenue)",
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "USD",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 1
+                    },
+                    "abbreviation": "compact"
+                  },
+                  "displayName": "Ingreso Promedio"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 2,
+            "width": 4,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "bar_roi_genre",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c7a6e8b0",
+                  "fields": [
+                    {
+                      "name": "genre",
+                      "expression": "`genre`"
+                    },
+                    {
+                      "name": "sum(avg_roi)",
+                      "expression": "SUM(`avg_roi`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "ROI por Género",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "genre",
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "Género",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(avg_roi)",
+                  "format": {
+                    "type": "number-plain",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    },
+                    "abbreviation": "none"
+                  },
+                  "displayName": "ROI Promedio",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "genre",
+                  "legend": {
+                    "hide": true
+                  },
+                  "displayName": "Género",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 5,
+            "width": 12,
+            "height": 7
+          }
+        },
+        {
+          "widget": {
+            "name": "combo_revenue_budget",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c7a6e8b0",
+                  "fields": [
+                    {
+                      "name": "genre",
+                      "expression": "`genre`"
+                    },
+                    {
+                      "name": "sum(avg_revenue)",
+                      "expression": "SUM(`avg_revenue`)"
+                    },
+                    {
+                      "name": "sum(avg_budget)",
+                      "expression": "SUM(`avg_budget`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 1,
+              "frame": {
+                "title": "Ingresos vs Presupuesto por Género",
+                "showTitle": true
+              },
+              "widgetType": "combo",
+              "encodings": {
+                "x": {
+                  "fieldName": "genre",
+                  "displayName": "Género",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "primary": {
+                    "fields": [
+                      {
+                        "fieldName": "sum(avg_revenue)",
+                        "displayName": "Ingreso Promedio"
+                      }
+                    ],
+                    "scale": {
+                      "type": "quantitative"
+                    }
+                  },
+                  "secondary": {
+                    "fields": [
+                      {
+                        "fieldName": "sum(avg_budget)",
+                        "displayName": "Presupuesto Promedio"
+                      }
+                    ],
+                    "scale": {
+                      "type": "quantitative"
+                    }
+                  }
+                },
+                "color": {
+                  "legend": {
+                    "position": "bottom"
+                  }
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 12,
+            "width": 6,
+            "height": 7
+          }
+        },
+        {
+          "widget": {
+            "name": "scatter_rating_roi",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c7a6e8b0",
+                  "fields": [
+                    {
+                      "name": "genre",
+                      "expression": "`genre`"
+                    },
+                    {
+                      "name": "sum(total_movies)",
+                      "expression": "SUM(`total_movies`)"
+                    },
+                    {
+                      "name": "sum(avg_rating)",
+                      "expression": "SUM(`avg_rating`)"
+                    },
+                    {
+                      "name": "sum(avg_roi)",
+                      "expression": "SUM(`avg_roi`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Rating vs ROI por Género",
+                "showTitle": true
+              },
+              "widgetType": "scatter",
+              "encodings": {
+                "x": {
+                  "fieldName": "sum(avg_rating)",
+                  "displayName": "Rating Promedio",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(avg_roi)",
+                  "displayName": "ROI Promedio",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "genre",
+                  "legend": {
+                    "hide": true
+                  },
+                  "displayName": "Género",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "size": {
+                  "fieldName": "sum(total_movies)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Total Películas"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 12,
+            "width": 6,
+            "height": 7
+          }
+        },
+        {
+          "widget": {
+            "name": "table_detail",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c7a6e8b0",
+                  "fields": [
+                    {
+                      "name": "genre",
+                      "expression": "`genre`"
+                    },
+                    {
+                      "name": "sum(total_movies)",
+                      "expression": "SUM(`total_movies`)"
+                    },
+                    {
+                      "name": "avg(avg_rating)",
+                      "expression": "AVG(`avg_rating`)"
+                    },
+                    {
+                      "name": "avg(avg_revenue)",
+                      "expression": "AVG(`avg_revenue`)"
+                    },
+                    {
+                      "name": "avg(avg_budget)",
+                      "expression": "AVG(`avg_budget`)"
+                    },
+                    {
+                      "name": "avg(avg_roi)",
+                      "expression": "AVG(`avg_roi`)"
+                    },
+                    {
+                      "name": "max(max_rating)",
+                      "expression": "MAX(`max_rating`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Detalle por Género",
+                "showTitle": true
+              },
+              "rowsPerPage": 25,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "genre",
+                    "displayName": "Género"
+                  },
+                  {
+                    "fieldName": "sum(total_movies)",
+                    "displayName": "Total Películas"
+                  },
+                  {
+                    "fieldName": "avg(avg_rating)",
+                    "displayName": "Rating Promedio"
+                  },
+                  {
+                    "fieldName": "avg(avg_revenue)",
+                    "displayName": "Ingreso Promedio"
+                  },
+                  {
+                    "fieldName": "avg(avg_budget)",
+                    "displayName": "Presupuesto Promedio"
+                  },
+                  {
+                    "fieldName": "avg(avg_roi)",
+                    "displayName": "ROI Promedio"
+                  },
+                  {
+                    "fieldName": "max(max_rating)",
+                    "displayName": "Rating Máximo"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 19,
+            "width": 12,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}
